@@ -136,7 +136,7 @@ const App: React.FC = () => {
           <button
             onClick={() => {
               if (validateFile(stocksFile)) {
-                uploadFile(stocksFile, "https://qvls5frwcc.execute-api.ap-south-1.amazonaws.com/V1/UploadLink_Anamay");
+                uploadFile(stocksFile, " https://ty1d56bgkb.execute-api.ap-south-1.amazonaws.com/default/Anamay_Stocks_UploadLink_Dev");
               }
             }}
           >
