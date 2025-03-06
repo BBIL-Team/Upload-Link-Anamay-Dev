@@ -18,18 +18,20 @@ const App: React.FC = () => {
 
   // Fetch upload status
   const fetchUploadStatus = async () => {
-    try {
-      const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
-      if (response.ok) {
-        const data = await response.json();
-        setUploadStatus(data.uploadStatus || {});
-      } else {
-        console.error("Failed to fetch upload status");
-      }
-    } catch (error) {
-      console.error("Error fetching upload status:", error);
+  try {
+    const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
+    if (response.ok) {
+      const data = await response.json();
+      console.log("Fetched Upload Status:", data.uploadStatus); // Debugging log
+      setUploadStatus(data.uploadStatus || {});
+    } else {
+      console.error("Failed to fetch upload status");
     }
-  };
+  } catch (error) {
+    console.error("Error fetching upload status:", error);
+  }
+};
+
 
   // Validate file type
   const validateFile = (file: File | null): boolean => {
@@ -74,41 +76,41 @@ const App: React.FC = () => {
 
   // Render calendar without status
   const renderCalendar = (date: Date) => {
-    const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-    const daysArray = [];
+  const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  const daysArray = [];
 
-    for (let i = 0; i < firstDayOfMonth; i++) {
-      daysArray.push(<td key={`empty-${i}`} className="empty"></td>);
-    }
+  for (let i = 0; i < firstDayOfMonth; i++) {
+    daysArray.push(<td key={`empty-${i}`} className="empty"></td>);
+  }
 
-    for (let day = 1; day <= daysInMonth; day++) {
+  for (let day = 1; day <= daysInMonth; day++) {
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`; // Format: YYYY-MM-DD
-    const isMissing = uploadStatus[dateString] === ""; // Check if the date is marked as empty in DynamoDB
+    const isMissing = !(dateString in uploadStatus) || uploadStatus[dateString] === ""; // Check if the date is missing
 
     daysArray.push(
-      <td
-        key={day}
-        className={`day ${isMissing ? "missing" : ""}`} // Apply "missing" class only if the status is empty
-        style={{ backgroundColor: isMissing ? "red" : "white" }}
-      >
+      <td key={day} className={`day ${isMissing ? "missing" : ""}`}>
         {day}
       </td>
     );
   }
 
-    const weeks = [];
-    let week = [];
-    for (let i = 0; i < daysArray.length; i++) {
-      week.push(daysArray[i]);
-      if (week.length === 7) {
-        weeks.push(<tr key={`week-${weeks.length}`}>{week}</tr>);
-        week = [];
-      }
-    }
-    if (week.length > 0) {
+  const weeks = [];
+  let week = [];
+  for (let i = 0; i < daysArray.length; i++) {
+    week.push(daysArray[i]);
+    if (week.length === 7) {
       weeks.push(<tr key={`week-${weeks.length}`}>{week}</tr>);
+      week = [];
     }
+  }
+  if (week.length > 0) {
+    weeks.push(<tr key={`week-${weeks.length}`}>{week}</tr>);
+  }
+
+    console.log("Current Upload Status in Calendar:", uploadStatus);
+    console.log("Checking date:", dateString, " - Missing:", isMissing);
+
 
     return (
       <table className="calendar-table" style={{ padding: '10px', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%' }}>
