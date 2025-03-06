@@ -10,7 +10,6 @@ const App: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetchUploadStatus();
