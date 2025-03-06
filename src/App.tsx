@@ -16,21 +16,23 @@ const App: React.FC = () => {
     fetchUploadStatus();
   }, [currentDate]);
 
-  // Fetch upload status
-  const fetchUploadStatus = async () => {
+  /const fetchUploadStatus = async () => {
   try {
     const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
     if (response.ok) {
       const data = await response.json();
-      console.log("Fetched Upload Status:", data.uploadStatus); // Debugging log
-      setUploadStatus(data.uploadStatus || {});
+      console.log("Full API Response:", data); // Log the full response
+      console.log("Extracted Upload Status:", data.uploadStatus); // Log only uploadStatus
+
+      setUploadStatus(data.uploadStatus || {}); // Ensure default empty object if undefined
     } else {
-      console.error("Failed to fetch upload status");
+      console.error("Failed to fetch upload status, status:", response.status);
     }
   } catch (error) {
     console.error("Error fetching upload status:", error);
   }
 };
+
 
 
   // Validate file type
