@@ -83,11 +83,19 @@ const App: React.FC = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${day}`;
-      const status = uploadStatus[dateKey] || "";
-      const cellClass = status === "Yes" ? "day green" : "day red";
-      daysArray.push(<td key={day} className={cellClass}>{day}</td>);
-    }
+    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`; // Format: YYYY-MM-DD
+    const isMissing = uploadStatus[dateString] === ""; // Check if the date is marked as empty in DynamoDB
+
+    daysArray.push(
+      <td
+        key={day}
+        className={`day ${isMissing ? "missing" : ""}`} // Apply "missing" class only if the status is empty
+        style={{ backgroundColor: isMissing ? "red" : "white" }}
+      >
+        {day}
+      </td>
+    );
+  }
 
     const weeks = [];
     let week = [];
