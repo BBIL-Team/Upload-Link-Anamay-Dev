@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from "react";
-import "./App.css";
-import { useAuthenticator } from "@aws-amplify/ui-react";
-import { DataStore } from "@aws-amplify/datastore";
-import { FileUpload } from "./models"; // Import generated model
+import React, { useState, useEffect } from 'react';
+import './App.css';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const App: React.FC = () => {
   const { signOut } = useAuthenticator();
@@ -10,18 +8,29 @@ const App: React.FC = () => {
   const [salesFile, setSalesFile] = useState<File | null>(null);
   const [responseMessage, setResponseMessage] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [uploadedDates, setUploadedDates] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    const fetchUploadedDates = async () => {
-      const uploads = await DataStore.query(FileUpload);
-      const dates = uploads.map((upload) => upload.date);
-      setUploadedDates(dates);
-    };
-    fetchUploadedDates();
-  }, []);
+    fetchUploadStatus();
+  }, [currentDate]);
 
+  // Fetch upload status
+  const fetchUploadStatus = async () => {
+    try {
+      const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
+      if (response.ok) {
+        const data = await response.json();
+        setUploadStatus(data.uploadStatus || {});
+      } else {
+        console.error("Failed to fetch upload status");
+      }
+    } catch (error) {
+      console.error("Error fetching upload status:", error);
+    }
+  };
+
+  // Validate file type
   const validateFile = (file: File | null): boolean => {
     if (file && file.name.endsWith(".csv")) {
       return true;
@@ -30,6 +39,7 @@ const App: React.FC = () => {
     return false;
   };
 
+  // Upload file function
   const uploadFile = async (file: File | null, apiUrl: string) => {
     if (!file) {
       alert("Please select a CSV file to upload.");
@@ -37,7 +47,7 @@ const App: React.FC = () => {
     }
 
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append('file', file);
 
     try {
       const response = await fetch(apiUrl, {
@@ -46,16 +56,9 @@ const App: React.FC = () => {
       });
 
       if (response.ok) {
-        const today = new Date().toISOString().split("T")[0];
-        await DataStore.save(
-          new FileUpload({
-            date: today,
-            userID: "example-user",
-          })
-        );
-
-        setUploadedDates((prev) => [...prev, today]);
-        setResponseMessage("File uploaded successfully!");
+        const data = await response.json();
+        setResponseMessage(data.message || "File uploaded successfully!");
+        fetchUploadStatus(); // Refresh status after upload
       } else {
         const errorText = await response.text();
         setResponseMessage(`Failed to upload file: ${errorText}`);
@@ -68,6 +71,7 @@ const App: React.FC = () => {
     setIsModalOpen(true);
   };
 
+  // Render calendar with upload status
   const renderCalendar = (date: Date) => {
     const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -78,11 +82,10 @@ const App: React.FC = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-      const isUploaded = uploadedDates.includes(formattedDate);
-      daysArray.push(
-        <td key={day} className={isUploaded ? "day uploaded" : "day"}>{day}</td>
-      );
+      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${day}`;
+      const status = uploadStatus[dateKey] || "";
+      const cellClass = status === "Yes" ? "day green" : "day red";
+      daysArray.push(<td key={day} className={cellClass}>{day}</td>);
     }
 
     const weeks = [];
@@ -116,42 +119,33 @@ const App: React.FC = () => {
     );
   };
 
+  const nextMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
+  const prevMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
+
   return (
-    <main>
-      <header>
-        <button onClick={signOut}>Sign out</button>
+    <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '90vw', backgroundColor: '#f8f8ff' }}>
+      <header style={{ width: '100%' }}>
+        <button style={{ marginLeft: 'auto', marginRight: '20px' }} onClick={signOut}>
+          Sign out
+        </button>
       </header>
 
-      <h1>Anamay - Dashboard Update Interface</h1>
+      <h1 style={{ padding: '10px', textAlign: 'center', width: '100vw' }}>
+        <u>Anamay - Dashboard Update Interface</u>
+      </h1>
 
-      <div>
-        <h2>Upload Stocks File</h2>
-        <input type="file" accept=".csv" onChange={(e) => setStocksFile(e.target.files?.[0] || null)} />
-        <button onClick={() => validateFile(stocksFile) && uploadFile(stocksFile, "STOCKS_UPLOAD_URL")}>Submit</button>
-      </div>
-
-      <div>
-        <h2>Upload Sales File</h2>
-        <input type="file" accept=".csv" onChange={(e) => setSalesFile(e.target.files?.[0] || null)} />
-        <button onClick={() => validateFile(salesFile) && uploadFile(salesFile, "SALES_UPLOAD_URL")}>Submit</button>
-      </div>
-
-      {responseMessage && <p>{responseMessage}</p>}
-
-      <div className="calendar-container">
-        <h3>Calendar (Daily Tracker)</h3>
+      {/* Calendar Component */}
+      <div style={{ position: 'absolute', top: '40vh', right: '10vw', width: '25vw', padding: '20px', backgroundColor: '#e6f7ff', borderRadius: '8px' }}>
+        <h3 style={{ textAlign: 'center' }}>Calendar (daily tracker)</h3>
+        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+          <button onClick={prevMonth}>&lt; </button>
+          <span style={{ margin: '0 10px' }}>
+            {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+          </span>
+          <button onClick={nextMonth}>&gt; </button>
+        </div>
         {renderCalendar(currentDate)}
       </div>
-
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Upload Status</h2>
-            <p>{responseMessage}</p>
-            <button onClick={() => setIsModalOpen(false)}>OK</button>
-          </div>
-        </div>
-      )}
     </main>
   );
 };
