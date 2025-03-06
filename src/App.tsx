@@ -10,6 +10,26 @@ const App: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    fetchUploadStatus();
+  }, [currentDate]);
+
+  // Fetch upload status
+  const fetchUploadStatus = async () => {
+    try {
+      const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
+      if (response.ok) {
+        const data = await response.json();
+        setUploadStatus(data.uploadStatus || {});
+      } else {
+        console.error("Failed to fetch upload status");
+      }
+    } catch (error) {
+      console.error("Error fetching upload status:", error);
+    }
+  };
 
   // Validate file type
   const validateFile = (file: File | null): boolean => {
