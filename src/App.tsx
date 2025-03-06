@@ -21,10 +21,14 @@ const App: React.FC = () => {
     const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
     if (response.ok) {
       const data = await response.json();
-      console.log("Full API Response:", data); // Log the full response
-      console.log("Extracted Upload Status:", data.uploadStatus); // Log only uploadStatus
+      console.log("Full API Response:", data);
 
-      setUploadStatus(data.uploadStatus || {}); // Ensure default empty object if undefined
+      const statusMap: { [key: string]: string } = {};
+      data.forEach((item: { date: string; color: string }) => {
+        statusMap[item.date] = item.color;
+      });
+
+      setUploadStatus(statusMap);
     } else {
       console.error("Failed to fetch upload status, status:", response.status);
     }
@@ -32,6 +36,7 @@ const App: React.FC = () => {
     console.error("Error fetching upload status:", error);
   }
 };
+
 
 
 
@@ -77,7 +82,7 @@ const App: React.FC = () => {
 
 
   // Render calendar without status
- const renderCalendar = (date: Date) => {
+const renderCalendar = (date: Date) => {
   const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   const daysArray = [];
@@ -87,13 +92,13 @@ const App: React.FC = () => {
   }
 
   for (let day = 1; day <= daysInMonth; day++) {
-    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`; // Format: YYYY-MM-DD
-    const isMissing = uploadStatus[dateString] === ""; // Check if the date is marked as empty in DynamoDB
+    const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const isMissing = uploadStatus[dateString] === "red";
 
     daysArray.push(
       <td
         key={day}
-        className={`day ${isMissing ? "missing" : ""}`} // Apply "missing" class only if the status is empty
+        className={`day ${isMissing ? "missing" : ""}`}
         style={{ backgroundColor: isMissing ? "red" : "white" }}
       >
         {day}
