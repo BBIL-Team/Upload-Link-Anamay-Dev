@@ -10,6 +10,7 @@ const App: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [uploadStatus, setUploadStatus] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetchUploadStatus();
@@ -82,7 +83,10 @@ const App: React.FC = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      daysArray.push(<td key={day} className="day">{day}</td>);
+      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${day}`;
+      const status = uploadStatus[dateKey] || "";
+      const cellClass = status === "Yes" ? "day green" : "day red";
+      daysArray.push(<td key={day} className={cellClass}>{day}</td>);
     }
 
     const weeks = [];
