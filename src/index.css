@@ -63,3 +63,8 @@ a {
   font-weight: 800;
   text-decoration: none;
 }
+.missing {
+  background-color: red !important;
+  color: white;
+  font-weight: bold;
+}
