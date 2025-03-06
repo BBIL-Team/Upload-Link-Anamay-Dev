@@ -108,10 +108,6 @@ const App: React.FC = () => {
     weeks.push(<tr key={`week-${weeks.length}`}>{week}</tr>);
   }
 
-    console.log("Current Upload Status in Calendar:", uploadStatus);
-    console.log("Checking date:", dateString, " - Missing:", isMissing);
-
-
     return (
       <table className="calendar-table" style={{ padding: '10px', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%' }}>
         <thead>
