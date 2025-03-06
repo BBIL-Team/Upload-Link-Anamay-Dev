@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+
+import React, { useState } from 'react';
 import './App.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
@@ -9,26 +10,6 @@ const App: React.FC = () => {
   const [responseMessage, setResponseMessage] = useState<string>("");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<{ [key: string]: string }>({});
-
-  useEffect(() => {
-    fetchUploadStatus();
-  }, [currentDate]);
-
-  // Fetch upload status
-  const fetchUploadStatus = async () => {
-    try {
-      const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
-      if (response.ok) {
-        const data = await response.json();
-        setUploadStatus(data.uploadStatus || {});
-      } else {
-        console.error("Failed to fetch upload status");
-      }
-    } catch (error) {
-      console.error("Error fetching upload status:", error);
-    }
-  };
 
   // Validate file type
   const validateFile = (file: File | null): boolean => {
@@ -39,7 +20,7 @@ const App: React.FC = () => {
     return false;
   };
 
-  // Upload file function
+    // Upload file function
   const uploadFile = async (file: File | null, apiUrl: string) => {
     if (!file) {
       alert("Please select a CSV file to upload.");
@@ -58,7 +39,6 @@ const App: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         setResponseMessage(data.message || "File uploaded successfully!");
-        fetchUploadStatus(); // Refresh status after upload
       } else {
         const errorText = await response.text();
         setResponseMessage(`Failed to upload file: ${errorText}`);
@@ -68,10 +48,11 @@ const App: React.FC = () => {
       setResponseMessage("An error occurred while uploading the file.");
     }
 
-    setIsModalOpen(true);
+    setIsModalOpen(true); // Open the modal when response is received
   };
 
-  // Render calendar with upload status
+
+  // Render calendar without status
   const renderCalendar = (date: Date) => {
     const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -82,10 +63,7 @@ const App: React.FC = () => {
     }
 
     for (let day = 1; day <= daysInMonth; day++) {
-      const dateKey = `${date.getFullYear()}-${date.getMonth() + 1}-${day}`;
-      const status = uploadStatus[dateKey] || "";
-      const cellClass = status === "Yes" ? "day green" : "day red";
-      daysArray.push(<td key={day} className={cellClass}>{day}</td>);
+      daysArray.push(<td key={day} className="day">{day}</td>);
     }
 
     const weeks = [];
@@ -102,7 +80,7 @@ const App: React.FC = () => {
     }
 
     return (
-      <table className="calendar-table">
+      <table className="calendar-table" style={{ padding: '10px', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%' }}>
         <thead>
           <tr>
             <th>Sun</th>
@@ -122,9 +100,20 @@ const App: React.FC = () => {
   const nextMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() + 1)));
   const prevMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
 
+    
+
+
   return (
     <main style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '90vw', backgroundColor: '#f8f8ff' }}>
       <header style={{ width: '100%' }}>
+        <div style={{ width: '130px', height: '90px', overflow: 'hidden', borderRadius: '8px' }}>
+          <img
+            style={{ padding: '10px', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%' }}
+            src="https://media.licdn.com/dms/image/v2/C560BAQFim2B73E6nkA/company-logo_200_200/company-logo_200_200/0/1644228681907/anamaybiotech_logo?e=2147483647&v=beta&t=RnXx4q1rMdk6bI5vKLGU6_rtJuF0hh_1ycTPmWxgZDo"
+            alt="Company Logo"
+            className="logo"
+          />
+        </div>
         <button style={{ marginLeft: 'auto', marginRight: '20px' }} onClick={signOut}>
           Sign out
         </button>
@@ -134,9 +123,68 @@ const App: React.FC = () => {
         <u>Anamay - Dashboard Update Interface</u>
       </h1>
 
+      {/* Stocks File Upload */}
+      <div>
+        <h2>&emsp;&emsp;Anamay Stocks</h2>
+        <p style={{ padding: '10px', backgroundColor: '#e6e6e6', borderRadius: '8px', width: '50vw', height: '70px', float: 'left' }}>
+          &emsp;&emsp;&emsp;&emsp;
+          <input
+            type="file"
+            accept=".csv"
+            onChange={(e) => setStocksFile(e.target.files?.[0] || null)}
+          />
+          <button
+            onClick={() => {
+              if (validateFile(stocksFile)) {
+                uploadFile(stocksFile, "https://qvls5frwcc.execute-api.ap-south-1.amazonaws.com/V1/UploadLink_Anamay");
+              }
+            }}
+          >
+            Submit Stocks File
+          </button>
+        </p>
+      </div>
+
+      <hr />
+
+      {/* Sales File Upload */}
+      <div>
+        <h2>&emsp;&emsp;Anamay Sales</h2>
+        <p style={{ padding: '10px', backgroundColor: '#e6e6e6', borderRadius: '8px', width: '50vw', height: '70px' }}>
+          &emsp;&emsp;&emsp;&emsp;
+          <input
+            type="file"
+            accept=".csv"
+            onChange={(e) => setSalesFile(e.target.files?.[0] || null)}
+          />
+          <button
+            onClick={() => {
+              if (validateFile(salesFile)) {
+                uploadFile(salesFile, "https://azjfhu323b.execute-api.ap-south-1.amazonaws.com/S1/UploadLinkAnamay_Sales");
+              }
+            }}
+          >
+            Submit Sales File
+          </button>
+        </p>
+      </div>
+
+      
+      {responseMessage && <p>{responseMessage}</p>}
+
       {/* Calendar Component */}
-      <div style={{ position: 'absolute', top: '40vh', right: '10vw', width: '25vw', padding: '20px', backgroundColor: '#e6f7ff', borderRadius: '8px' }}>
-        <h3 style={{ textAlign: 'center' }}>Calendar (daily tracker)</h3>
+      <div
+        style={{
+          position: 'absolute',
+          top: '40vh',
+          right: '10vw',
+          width: '25vw',
+          padding: '20px',
+          backgroundColor: '#e6f7ff',
+          borderRadius: '8px',
+        }}
+      >
+       <h3 style={{ textAlign: 'center' }}>Calendar1 (daily tracker)</h3>
         <div style={{ textAlign: 'center', marginBottom: '20px' }}>
           <button onClick={prevMonth}>&lt; </button>
           <span style={{ margin: '0 10px' }}>
@@ -146,8 +194,59 @@ const App: React.FC = () => {
         </div>
         {renderCalendar(currentDate)}
       </div>
+
+
+      {/* Modal Popup */}
+      {isModalOpen && (
+        <div style={modalStyles.overlay}>
+          <div style={modalStyles.modal}>
+            <h2>Upload Status</h2>
+            <p>{responseMessage}</p>
+            <div style={modalStyles.buttonContainer}>
+              <button style={modalStyles.button} onClick={() => setIsModalOpen(false)}>OK</button>
+               {/*<button style={{ ...modalStyles.button, backgroundColor: 'red' }} onClick={() => setIsModalOpen(false)}>Close</button>*/}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
+};
+
+// Modal Styles
+const modalStyles = {
+  overlay: {
+    position: 'fixed' as const,
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: '20px',
+    borderRadius: '10px',
+    textAlign: 'center' as const,
+    width: '300px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+  },
+  buttonContainer: {
+    marginTop: '20px',
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
+  button: {
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '5px',
+    backgroundColor: '#007BFF',
+    color: '#fff',
+    cursor: 'pointer',
+  },
 };
 
 export default App;
