@@ -75,7 +75,7 @@ const App: React.FC = () => {
 
 
   // Render calendar without status
-  const renderCalendar = (date: Date) => {
+ const renderCalendar = (date: Date) => {
   const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
   const daysArray = [];
@@ -86,10 +86,14 @@ const App: React.FC = () => {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`; // Format: YYYY-MM-DD
-    const isMissing = !(dateString in uploadStatus) || uploadStatus[dateString] === ""; // Check if the date is missing
+    const isMissing = uploadStatus[dateString] === ""; // Check if the date is marked as empty in DynamoDB
 
     daysArray.push(
-      <td key={day} className={`day ${isMissing ? "missing" : ""}`}>
+      <td
+        key={day}
+        className={`day ${isMissing ? "missing" : ""}`} // Apply "missing" class only if the status is empty
+        style={{ backgroundColor: isMissing ? "red" : "white" }}
+      >
         {day}
       </td>
     );
@@ -107,6 +111,7 @@ const App: React.FC = () => {
   if (week.length > 0) {
     weeks.push(<tr key={`week-${weeks.length}`}>{week}</tr>);
   }
+
 
     return (
       <table className="calendar-table" style={{ padding: '10px', width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 50%' }}>
