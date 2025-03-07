@@ -21,14 +21,10 @@ const App: React.FC = () => {
     const response = await fetch("https://9a9fn3wa2l.execute-api.ap-south-1.amazonaws.com/D1/deepshikatest");
     if (response.ok) {
       const data = await response.json();
-      console.log("Full API Response:", data);
+      console.log("API Response:", data);
 
-      const statusMap: { [key: string]: string } = {};
-      data.forEach((item: { date: string; color: string }) => {
-        statusMap[item.date] = item.color;
-      });
-
-      setUploadStatus(statusMap);
+      // Store the upload status with colors mapped correctly
+      setUploadStatus(data);
     } else {
       console.error("Failed to fetch upload status, status:", response.status);
     }
@@ -36,9 +32,6 @@ const App: React.FC = () => {
     console.error("Error fetching upload status:", error);
   }
 };
-
-
-
 
   // Validate file type
   const validateFile = (file: File | null): boolean => {
@@ -93,14 +86,10 @@ const renderCalendar = (date: Date) => {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const isMissing = uploadStatus[dateString] === "red";
+    const color = uploadStatus[dateString] || "white"; // Get color from API data
 
     daysArray.push(
-      <td
-        key={day}
-        className={`day ${isMissing ? "missing" : ""}`}
-        style={{ backgroundColor: isMissing ? "red" : "white" }}
-      >
+      <td key={day} className="day" style={{ backgroundColor: color }}>
         {day}
       </td>
     );
