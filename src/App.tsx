@@ -226,7 +226,7 @@ const renderCalendar = (date: Date) => {
           top: '40vh',
           right: '10vw',
           width: '25vw',
-          padding: '20px',
+          padding: '0px',
           backgroundColor: '#e6f7ff',
           borderRadius: '8px',
         }}
