@@ -33,6 +33,23 @@ const App: React.FC = () => {
   }
 };
 
+  // Function to determine color for each date
+  const getDateColor = (date: string): string => {
+    if (uploadStatus[date]) return uploadStatus[date]; // Use API color if available
+
+    const today = new Date();
+    const givenDate = new Date(date);
+
+    const marchFirst = new Date(2025, 2, 1); // March 1, 2025 (Month is 0-based)
+
+    // Mark all dates from March 1, 2025, to today as red if no data
+    if (givenDate >= marchFirst && givenDate <= today) {
+      return "#ffa366"; // Red
+    }
+
+    return "white"; // Default color
+  };
+
   // Validate file type
   const validateFile = (file: File | null): boolean => {
     if (file && file.name.endsWith(".csv")) {
@@ -86,8 +103,8 @@ const renderCalendar = (date: Date) => {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const color = uploadStatus[dateString] || "white"; // Get color from API data
-
+    const color = getDateColor(dateString); // Determine color for the date
+    
     daysArray.push(
       <td key={day} className="day" style={{ backgroundColor: color }}>
         {day}
