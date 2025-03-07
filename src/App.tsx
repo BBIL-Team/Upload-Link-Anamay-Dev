@@ -106,7 +106,7 @@ const renderCalendar = (date: Date) => {
     const color = getDateColor(dateString); // Determine color for the date
     
     daysArray.push(
-      <td key={day} className="day" style={{ backgroundColor: color }}>
+      <td key={day} className="day" style={{ backgroundColor: color, textAlign:'center' }}>
         {day}
       </td>
     );
