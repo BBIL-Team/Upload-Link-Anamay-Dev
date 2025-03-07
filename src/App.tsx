@@ -103,8 +103,11 @@ const renderCalendar = (date: Date) => {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dateString = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const color = getDateColor(dateString); // Determine color for the date
-    const color = new Date(date.getFullYear(), date.getMonth(), day).getDay() === 0 ? "white" : getDateColor(dateString); // Ensure Sundays are white
+    // Determine color for the date (Ensure Sundays are white)
+  const color = new Date(date.getFullYear(), date.getMonth(), day).getDay() === 0 
+    ? "white" 
+    : getDateColor(dateString);
+
     
     daysArray.push(
       <td key={day} className="day" style={{ backgroundColor: color, textAlign:'center' }}>
