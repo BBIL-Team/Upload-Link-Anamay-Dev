@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { useAuthenticator } from '@aws-amplify/ui-react';
-import Footer from './components/Footer'; // 🆕 Import Footer
 
 const App: React.FC = () => {
   const { signOut } = useAuthenticator();
@@ -228,8 +227,17 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* 🆕 Footer at the bottom */}
-      <Footer />
+      {/* ✅ Simple Footer without importing anything */}
+  <footer style={{
+    width: '100%',
+    padding: '15px',
+    backgroundColor: '#f1f1f1',
+    textAlign: 'center',
+    fontSize: '14px',
+    color: '#555',
+  }}>
+    © {new Date().getFullYear()} Anamay Biotech. All rights reserved.
+  </footer>
     </div>
   );
 };
