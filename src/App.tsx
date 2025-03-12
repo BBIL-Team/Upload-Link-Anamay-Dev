@@ -237,6 +237,15 @@ const App: React.FC = () => {
   }}>
     Thank You
   </footer>
+   <footer style={{
+    width:'100%',
+    backgroundColor: '#CBC3E3',
+    textAlign: 'center',
+    fontSize: '14px',
+    color: '#FFFFFF',
+  }}>
+    Thank You
+  </footer>
     </div>
   );
 };
