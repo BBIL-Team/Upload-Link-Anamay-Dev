@@ -235,7 +235,7 @@ const App: React.FC = () => {
     fontSize: '14px',
     color: '#555',
   }}>
-    © {new Date().getFullYear()} Anamay Biotech. All rights reserved.
+    Thank You
   </footer>
     </div>
   );
