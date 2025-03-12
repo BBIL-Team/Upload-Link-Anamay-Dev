@@ -233,7 +233,7 @@ const App: React.FC = () => {
     backgroundColor: '#483d8b',
     textAlign: 'center',
     fontSize: '14px',
-    color: '#555',
+    color: '#FFFFFF',
   }}>
     Thank You
   </footer>
