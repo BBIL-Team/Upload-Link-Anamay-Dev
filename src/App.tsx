@@ -229,8 +229,7 @@ const App: React.FC = () => {
 
       {/* ✅ Simple Footer without importing anything */}
   <footer style={{
-    width: '100%',
-    padding: '15px',
+    width:'100%'
     backgroundColor: '#f1f1f1',
     textAlign: 'center',
     fontSize: '14px',
