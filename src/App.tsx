@@ -136,7 +136,7 @@ const App: React.FC = () => {
   const prevMonth = () => setCurrentDate(new Date(currentDate.setMonth(currentDate.getMonth() - 1)));
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '90vw', backgroundColor: '#f8f8ff' }}>
         <header style={{ width: '100%' }}>
           <div style={{ width: '130px', height: '90px', overflow: 'hidden', borderRadius: '8px' }}>
@@ -195,7 +195,7 @@ const App: React.FC = () => {
         {/* Calendar */}
         <div style={{
           position: 'absolute',
-          top: '40vh',
+          top: '38vh',
           right: '10vw',
           width: '25vw',
           padding: '0px',
