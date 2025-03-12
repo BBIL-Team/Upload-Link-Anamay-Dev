@@ -18,3 +18,11 @@ header {
 .day.red {
   background-color: lightcoral;
 }
+
+/* App.css */
+footer {
+  background-color: #f8f8f8;
+  padding: 20px;
+  text-align: center;
+}
+
