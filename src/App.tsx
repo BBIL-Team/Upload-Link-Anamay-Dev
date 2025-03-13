@@ -202,7 +202,7 @@ const App: React.FC = () => {
           backgroundColor: '#e6f7ff',
           borderRadius: '8px',
         }}>
-          <h3 style={{ textAlign: 'center' }}>Calendar1 (daily tracker)</h3>
+          <h3 style={{ textAlign: 'center' }}>Calendar (daily tracker)</h3>
           <div style={{ textAlign: 'center', marginBottom: '20px' }}>
             <button onClick={prevMonth}>&lt; </button>
             <span style={{ margin: '0 10px' }}>
