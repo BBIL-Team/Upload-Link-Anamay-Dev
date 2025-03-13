@@ -195,7 +195,7 @@ const App: React.FC = () => {
         {/* Calendar */}
         <div style={{
           position: 'absolute',
-          top: '38vh',
+          top: '35vh',
           right: '10vw',
           width: '25vw',
           padding: '0px',
@@ -240,11 +240,14 @@ const App: React.FC = () => {
    <footer style={{
     width:'100%',
     backgroundColor: '#CBC3E3',
-    textAlign: 'center',
+    textAlign: 'left',
     fontSize: '14px',
     color: '#FFFFFF',
   }}>
-    Thank You
+   <a href="https://ap-south-1.quicksight.aws.amazon.com/sn/dashboards/61e1a019-4de1-4e09-bdde-61c3a0ca77bc" target="_blank" rel="noopener noreferrer">
+Dashboard Link
+</a>
+
   </footer>
     </div>
   );
