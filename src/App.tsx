@@ -246,6 +246,7 @@ const App: React.FC = () => {
   }}>
    <div style={{
     display: 'flex',
+    textAlign: 'center',
     gap: '80px', // space between links
     flexWrap: 'wrap' // allows wrapping on smaller screens (optional)
   }}>
