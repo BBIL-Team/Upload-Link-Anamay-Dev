@@ -246,7 +246,7 @@ const App: React.FC = () => {
   }}>
    <div style={{
     display: 'flex',
-    gap: '40px', // space between links
+    gap: '80px', // space between links
     flexWrap: 'wrap' // allows wrapping on smaller screens (optional)
   }}>
     <a href="https://ap-south-1.quicksight.aws.amazon.com/sn/dashboards/61e1a019-4de1-4e09-bdde-61c3a0ca77bc" target="_blank" rel="noopener noreferrer" style={{ color: '#000000'}}>
