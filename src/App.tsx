@@ -252,14 +252,14 @@ const App: React.FC = () => {
     <a href="https://ap-south-1.quicksight.aws.amazon.com/sn/dashboards/61e1a019-4de1-4e09-bdde-61c3a0ca77bc" target="_blank" rel="noopener noreferrer" style={{ color: '#000000'}}>
      <b>Dashboard Link</b>
     </a>
-    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none' }}>
-      Report a Problem
+    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#000000'}}>
+      <b>Report a Problem</b>
     </a>
-    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none' }}>
-      Call Business Analytics Dept
+    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#000000'}}>
+      <b>Call Business Analytics Dept</b>
     </a>
-    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#FFFFFF', textDecoration: 'none' }}>
-      Request for a Call Back
+    <a href="https://example.com" target="_blank" rel="noopener noreferrer" style={{ color: '#000000'}}>
+      <b>Request for a Call Back</b>
     </a>
   </div>
 </footer>
