@@ -244,9 +244,16 @@ const App: React.FC = () => {
     fontSize: '14px',
     color: '#FFFFFF',
   }}>
+  <div>
    <a href="https://ap-south-1.quicksight.aws.amazon.com/sn/dashboards/61e1a019-4de1-4e09-bdde-61c3a0ca77bc" target="_blank" rel="noopener noreferrer">
 Dashboard Link
 </a>
+</div>
+<div>
+  <a href="https://example.com" target="_blank" rel="noopener noreferrer">
+  Report a Prbolem
+  </a>
+</div>
 <a href="https://example.com" target="_blank" rel="noopener noreferrer">
   Report a Prbolem
   </a>
