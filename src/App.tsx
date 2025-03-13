@@ -230,6 +230,7 @@ const App: React.FC = () => {
       {/* ✅ Simple Footer without importing anything */}
   <footer style={{
     width:'100%',
+    height:'3vh',
     backgroundColor: '#483d8b',
     textAlign: 'center',
     fontSize: '14px',
@@ -246,7 +247,7 @@ const App: React.FC = () => {
   }}>
    <div style={{
     display: 'flex',
-    justifyContent: 'flex-start', 
+    justifyContent: 'space-around',
     gap: '80px', // space between links
     flexWrap: 'wrap' // allows wrapping on smaller screens (optional)
   }}>
