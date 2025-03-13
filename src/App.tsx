@@ -254,9 +254,16 @@ Dashboard Link
   Report a Prbolem
   </a>
 </div>
+<div>
 <a href="https://example.com" target="_blank" rel="noopener noreferrer">
-  Report a Prbolem
+  Call Business Analytics Dept
   </a>
+</div>
+<div>
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+Request for a call Back
+  </a>
+</div>
   </footer>
     </div>
   );
