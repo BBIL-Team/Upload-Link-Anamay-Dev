@@ -247,7 +247,9 @@ const App: React.FC = () => {
    <a href="https://ap-south-1.quicksight.aws.amazon.com/sn/dashboards/61e1a019-4de1-4e09-bdde-61c3a0ca77bc" target="_blank" rel="noopener noreferrer">
 Dashboard Link
 </a>
-
+<a href="https://example.com" target="_blank" rel="noopener noreferrer">
+  Report a Prbolem
+  </a>
   </footer>
     </div>
   );
